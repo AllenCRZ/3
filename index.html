@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>给最爱的人</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: none;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            text-align: center;
+            line-height: 1.5;
+            padding: 15px;
+            touch-action: manipulation;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            word-break: break-word;
+        }
+        
+        h1 {
+            color: #e74c3c;
+            margin: 10px 0 15px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .date-info {
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #7f8c8d;
+        }
+        
+        .date-info p {
+            margin: 5px 0;
+        }
+        
+        .love-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .special-event {
+            margin: 15px 0;
+            padding: 12px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            font-size: 16px;
+            display: none;
+        }
+        
+        /* 心形按钮样式 */
+        .heart-btn {
+            width: 70px;
+            height: 70px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4);
+            border: none;
+            outline: none;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .heart-btn i {
+            color: white;
+            font-size: 32px;
+        }
+        
+        .heart-btn:active {
+            transform: scale(0.9);
+        }
+        
+        /* 烟花效果 */
+        .firework {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        /* 天气提示 */
+        .weather-tip {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #2ecc71;
+            font-size: 14px;
+        }
+        
+        /* 弹窗样式 */
+        .surprise-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+        
+        .surprise-message h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+        
+        .surprise-message p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .close-surprise {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+        
+        /* 防止长按菜单 */
+        .no-select {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        /* 动画效果 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .heartbeat {
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        /* 微信浏览器适配 */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px 12px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .love-message {
+                font-size: 17px;
+                padding: 12px;
+            }
+            
+            .special-event {
+                font-size: 15px;
+            }
+            
+            .heart-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .heart-btn i {
+                font-size: 28px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="no-select">
+    <div class="container">
+        <h1>我最爱的你 <i class="fas fa-heart" style="color: #e74c3c;"></i></h1>
+        
+        <div class="date-info">
+            <p id="current-date">今天是2023年1月1日，星期X</p>
+            <p id="solar-term"></p>
+            <p id="festival"></p>
+            <p id="weather-info"></p>
+        </div>
+        
+        <div class="love-message" id="daily-message">
+            今天的情话加载中...
+        </div>
+        
+        <div class="special-event" id="special-message">
+            <!-- 特别节日/节气情话 -->
+        </div>
+        
+        <button class="heart-btn heartbeat" id="heart-btn">
+            <i class="fas fa-heart"></i>
+        </button>
+        
+        <div class="weather-tip" id="weather-tip">
+            <!-- 天气温馨提示 -->
+        </div>
+        
+        <div class="footer">
+            <p>每一天都比昨天更爱你 ❤️</p>
+        </div>
+    </div>
+    
+    <div class="surprise-message" id="surprise-message">
+        <span class="close-surprise" id="close-surprise">&times;</span>
+        <h2>惊喜!</h2>
+        <p id="surprise-content">今天也是爱你的一天!</p>
+    </div>
+    
+    <script>
+        // 多样化情话库（避免重复称呼）
+        const loveMessages = [
+            "今天也是宇宙第一可爱！",
+            "被你的美貌暴击的一天！",
+            "我怀疑你是甜点变的，不然怎么这么甜～",
+            "报告！今天比昨天更爱你0.1吨！",
+            "你知道你和星星的区别吗？星星在天上，你在我心里",
+            "你的笑容是我的每日维他命！",
+            "今天也是被可爱到缺氧的一天",
+            "我上辈子一定是碳酸饮料，一见到你就开心得冒泡",
+            "你是我的私有浪漫，不容侵犯",
+            "今天的美貌也在认真营业呢！",
+            "是吃可爱多长大的吧？",
+            "我的手机壁纸该换了，换成你最新的美照",
+            "今天也是为你疯狂心动的一天",
+            "你是我的小太阳，照亮我的每一天",
+            "我要去输液了，想你的夜～",
+            "是巧克力做的吧？不然怎么这么甜",
+            "今天的美貌也在我的审美点上疯狂蹦迪",
+            "你是我的专属小仙女",
+            "我怀疑你是碳酸饮料，一看到你就开心得冒泡",
+            "你是我的充电宝，见到你就充满能量",
+            "今天的美貌也在正常营业呢！",
+            "你是我的小饼干，想一口吃掉",
+            "你是我的掌上明珠，捧在手心怕摔了",
+            "今天也是被迷得神魂颠倒的一天",
+            "你是我的小星星，一闪一闪亮晶晶",
+            "你是我的甜甜圈，甜到心里去",
+            "今天的美貌也在超标营业！",
+            "你是我的小兔子，想把你抱在怀里",
+            "你是我的小猫咪，想揉揉你的脸",
+            "今天也是被可爱到无法呼吸的一天",
+            "你是我的小公主，要宠你一辈子",
+            "你是我的小太阳，温暖我的心房",
+            "今天的美貌也在闪闪发光",
+            "你是我的小幸运，遇见你真好",
+            "你是我的小宝贝，要好好珍惜",
+            "今天也是被迷得七荤八素的一天",
+            "你是我的小心肝，要好好爱护",
+            "你是我的小甜心，甜到我心里",
+            "今天的美貌也在疯狂输出",
+            "你是我的小可爱，想捏捏你的脸",
+            "你是我的小天使，降临到我身边",
+            "今天也是被可爱到流鼻血的一天",
+            "你是我的小精灵，点亮我的生活",
+            "你是我的小蜜糖，甜到忧伤",
+            "今天的美貌也在稳定发挥",
+            "你是我的小彩虹，让生活多姿多彩",
+            "你是我的小云朵，柔软又温暖",
+            "今天也是被可爱到晕厥的一天",
+            "你是我的小花朵，需要用心浇灌"
+        ];
+        
+        // 节气情话
+        const solarTermMessages = {
+            "立春": "立春了，万物复苏，而我对你的爱也在不断生长",
+            "雨水": "雨水滋润大地，而你滋润我的心田",
+            "惊蛰": "惊蛰雷动，不如你一笑让我心动",
+            "春分": "春分昼夜平分，而我愿把全部时间都分给你",
+            "清明": "清明时节雨纷纷，而我对你的思念更深沉",
+            "谷雨": "谷雨播种希望，而你播种了我全部的爱",
+            "立夏": "立夏了，天气渐热，而我对你的热情更甚",
+            "小满": "小满未满，而我对你的爱已经满溢",
+            "芒种": "芒种忙种，而我忙着爱你",
+            "夏至": "夏至日最长，而我对你的思念更长",
+            "小暑": "小暑炎热，而我对你的爱更热烈",
+            "大暑": "大暑最热，而你是我最热的爱恋",
+            "立秋": "立秋了，暑气渐消，而我对你的爱丝毫不减",
+            "处暑": "处暑暑气止，而我对你的爱永不止息",
+            "白露": "白露凝霜，而我的心里装满了你",
+            "秋分": "秋分昼夜均，而我愿与你平分秋色",
+            "寒露": "寒露渐冷，而你的温暖让我心热",
+            "霜降": "霜降天寒，而你的拥抱最温暖",
+            "立冬": "立冬了，万物收藏，而我想把你收藏在心里",
+            "小雪": "小雪飘飘，而我对你的爱纷纷扬扬",
+            "大雪": "大雪纷飞，而我对你的爱铺天盖地",
+            "冬至": "冬至夜最长，而我对你的思念更长",
+            "小寒": "小寒冷冽，而你的笑容最温暖",
+            "大寒": "大寒最冷，而你是我最暖的依靠"
+        };
+        
+        // 节日情话
+        const festivalMessages = {
+            "元旦": "新年第一天，第一个想到的就是你，元旦快乐！",
+            "情人节": "情人节快乐！你是我今生唯一的挚爱",
+            "妇女节": "女神节快乐！在我心中你永远是最美的",
+            "劳动节": "劳动节快乐！感谢你为这个家付出的一切",
+            "儿童节": "儿童节快乐！在我心里你永远是需要呵护的小朋友",
+            "七夕": "七夕快乐！牛郎织女一年一见，而我们天天相见更幸福",
+            "中秋节": "中秋月圆人团圆，而我最想团圆的人就是你",
+            "国庆节": "国庆节快乐！和你在一起的每一天都值得庆祝",
+            "圣诞节": "圣诞快乐！你就是我今年最想要的礼物",
+            "生日": "生日快乐！你出生的那天就是我最感恩的日子",
+            "结婚纪念日": "结婚纪念日快乐！每一天都比昨天更爱你",
+            "相识纪念日": "还记得我们相识的那天吗？那是我生命中最美好的一天"
+        };
+        
+        // 天气温馨提示
+        const weatherTips = {
+            "hot": "今天气温较高，要注意防晒补水哦～",
+            "warm": "天气温暖舒适，适合约会呢！",
+            "cool": "天气转凉了，记得带件外套",
+            "cold": "天冷了，要把你的手放进我口袋暖着",
+            "rain": "今天有雨，记得带伞",
+            "snow": "下雪了，要和你一起白头",
+            "windy": "风大，要抱紧你别被吹跑了"
+        };
+        
+        // 获取当前日期信息
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+            const weekday = weekdays[now.getDay()];
+            
+            return {
+                year,
+                month,
+                day,
+                weekday,
+                dateStr: `${year}年${month}月${day}日，星期${weekday}`,
+                dayOfYear: Math.floor((now - new Date(year, 0, 0)) / (1000 * 60 * 60 * 24))
+            };
+        }
+        
+        // 获取节气信息
+        function getSolarTerm(date) {
+            const terms = [
+                {name: "小寒", month: 1, day: 5},
+                {name: "大寒", month: 1, day: 20},
+                {name: "立春", month: 2, day: 4},
+                {name: "雨水", month: 2, day: 19},
+                {name: "惊蛰", month: 3, day: 5},
+                {name: "春分", month: 3, day: 20},
+                {name: "清明", month: 4, day: 4},
+                {name: "谷雨", month: 4, day: 20},
+                {name: "立夏", month: 5, day: 5},
+                {name: "小满", month: 5, day: 21},
+                {name: "芒种", month: 6, day: 6},
+                {name: "夏至", month: 6, day: 21},
+                {name: "小暑", month: 7, day: 7},
+                {name: "大暑", month: 7, day: 23},
+                {name: "立秋", month: 8, day: 7},
+                {name: "处暑", month: 8, day: 23},
+                {name: "白露", month: 9, day: 7},
+                {name: "秋分", month: 9, day: 23},
+                {name: "寒露", month: 10, day: 8},
+                {name: "霜降", month: 10, day: 23},
+                {name: "立冬", month: 11, day: 7},
+                {name: "小雪", month: 11, day: 22},
+                {name: "大雪", month: 12, day: 7},
+                {name: "冬至", month: 12, day: 22}
+            ];
+            
+            for (const term of terms) {
+                if (date.month === term.month && date.day === term.day) {
+                    return term.name;
+                }
+            }
+            
+            return null;
+        }
+        
+        // 获取节日信息
+        function getFestival(date) {
+            const festivals = [
+                {name: "元旦", month: 1, day: 1},
+                {name: "情人节", month: 2, day: 14},
+                {name: "妇女节", month: 3, day: 8},
+                {name: "劳动节", month: 5, day: 1},
+                {name: "儿童节", month: 6, day: 1},
+                {name: "七夕", month: 8, day: 25},
+                {name: "中秋节", month: 9, day: 21},
+                {name: "国庆节", month: 10, day: 1},
+                {name: "圣诞节", month: 12, day: 25}
+            ];
+            
+            for (const festival of festivals) {
+                if (date.month === festival.month && date.day === festival.day) {
+                    return festival.name;
+                }
+            }
+            
+            return null;
+        }
+        
+        // 模拟获取天气信息
+        function getWeatherInfo() {
+            // 实际应用中这里应该调用天气API
+            const seasons = [
+                {type: "cold", temp: "5°C", desc: "寒冷", month: [1,2,12]},
+                {type: "cool", temp: "15°C", desc: "凉爽", month: [3,4,10,11]},
+                {type: "warm", temp: "22°C", desc: "温暖", month: [5,6,9]},
+                {type: "hot", temp: "32°C", desc: "炎热", month: [7,8]}
+            ];
+            
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const weather = seasons.find(s => s.month.includes(month)) || seasons[0];
+            
+            // 随机添加特殊天气
+            const specialWeathers = ["rain", "snow", "windy"];
+            if (Math.random() > 0.7) {
+                weather.special = specialWeathers[Math.floor(Math.random() * specialWeathers.length)];
+            }
+            
+            return weather;
+        }
+        
+        // 获取每日情话
+        function getDailyLoveMessage(date) {
+            const seed = date.year * 10000 + date.month * 100 + date.day;
+            const index = seed % loveMessages.length;
+            return loveMessages[index];
+        }
+        
+        // 创建烟花效果
+        function createFireworks() {
+            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#1abc9c'];
+            const count = 50; // 烟花粒子数量
+            
+            // 从点击位置发射
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            for (let i = 0; i < count; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.left = centerX + 'px';
+                firework.style.top = centerY + 'px';
+                firework.style.width = (Math.random() * 6 + 4) + 'px';
+                firework.style.height = (Math.random() * 6 + 4) + 'px';
+                
+                document.body.appendChild(firework);
+                
+                // 随机角度和距离
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 200 + 100;
+                const duration = Math.random() * 1000 + 1000;
+                
+                const animation = firework.animate([
+                    { 
+                        transform: 'translate(0, 0) scale(1)',
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    firework.remove();
+                };
+            }
+        }
+        
+        // 显示惊喜消息
+        function showSurpriseMessage() {
+            const messages = [
+                "今天的惊喜是：我比昨天更爱你！",
+                "你是我今生最珍贵的礼物",
+                "每天送你一个爱的惊喜",
+                "今天的礼物是：我的全部真心",
+                "你打开的不仅是惊喜，是我的心",
+                "每日惊喜准时送达，请签收我的爱",
+                "惊喜盒里装着我对你的思念",
+                "拆开惊喜发现是我满满的爱！",
+                "今天的惊喜是：你值得所有的美好",
+                "惊喜里藏着我所有的温柔"
+            ];
+            
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('surprise-content').textContent = randomMsg;
+            document.getElementById('surprise-message').style.display = 'block';
+            
+            // 3秒后自动关闭
+            setTimeout(() => {
+                document.getElementById('surprise-message').style.display = 'none';
+            }, 3000);
+        }
+        
+        // 检测移动设备
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        // 初始化页面
+        function initPage() {
+            const date = getCurrentDate();
+            
+            // 显示日期
+            document.getElementById('current-date').textContent = date.dateStr;
+            
+            // 获取并显示节气
+            const solarTerm = getSolarTerm(date);
+            if (solarTerm) {
+                document.getElementById('solar-term').textContent = `节气：${solarTerm}`;
+                document.getElementById('special-message').textContent = solarTermMessages[solarTerm];
+                document.getElementById('special-message').style.display = 'block';
+            }
+            
+            // 获取并显示节日
+            const festival = getFestival(date);
+            if (festival) {
+                document.getElementById('festival').textContent = `节日：${festival}`;
+                // 如果当天不是节气才显示节日情话
+                if (!solarTerm) {
+                    document.getElementById('special-message').textContent = festivalMessages[festival];
+                    document.getElementById('special-message').style.display = 'block';
+                }
+            }
+            
+            // 显示每日情话
+            document.getElementById('daily-message').textContent = getDailyLoveMessage(date);
+            
+            // 获取并显示天气信息
+            const weather = getWeatherInfo();
+            document.getElementById('weather-info').textContent = `天气：${weather.desc} ${weather.temp}`;
+            
+            // 显示天气温馨提示
+            const weatherTipEl = document.getElementById('weather-tip');
+            weatherTipEl.textContent = weatherTips[weather.type];
+            if (weather.special) {
+                weatherTipEl.textContent += " " + weatherTips[weather.special];
+            }
+            weatherTipEl.style.display = 'block';
+            
+            // 爱心按钮点击事件
+            document.getElementById('heart-btn').addEventListener('click', function() {
+                createFireworks();
+                showSurpriseMessage();
+                
+                // 添加点击动画
+                this.classList.remove('heartbeat');
+                void this.offsetWidth; // 触发重绘
+                this.classList.add('heartbeat');
+            });
+            
+            // 关闭惊喜消息
+            document.getElementById('close-surprise').addEventListener('click', function() {
+                document.getElementById('surprise-message').style.display = 'none';
+            });
+            
+            // 微信浏览器特殊处理
+            if (/MicroMessenger/i.test(navigator.userAgent)) {
+                document.body.style.height = window.innerHeight + 'px';
+                window.addEventListener('resize', function() {
+                    document.body.style.height = window.innerHeight + 'px';
+                });
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
